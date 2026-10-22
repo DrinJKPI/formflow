@@ -1,0 +1,112 @@
+// Prisma schema: describes the database tables and how they relate.
+// After changing this file, run `npm run db:migrate` to update the database.
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("DATABASE_URL") // pooled connection, used by the app
+    directUrl = env("DIRECT_URL") // direct/session connection, used for migrations
+}
+
+// ---------- Accounts ----------
+
+model User {
+    id           String    @id @default(cuid())
+    email        String    @unique
+    passwordHash String
+    name         String?
+    createdAt    DateTime  @default(now())
+    sessions     Session[]
+    forms        Form[]
+}
+
+// A logged-in browser. The cookie holds a random token; we only store its
+// SHA-256 hash here, so a leaked database cannot be used to log in.
+model Session {
+    id        String   @id // SHA-256 hash of the session token
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+
+    @@index([userId])
+}
+
+// ---------- Forms ----------
+
+enum FormStatus {
+    DRAFT
+    PUBLISHED
+}
+
+enum QuestionType {
+    TEXT
+    EMAIL
+    MULTIPLE_CHOICE
+    YES_NO
+}
+
+model Form {
+    id                String     @id @default(cuid())
+    userId            String
+    user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    title             String
+    description       String?
+    slug              String     @unique // used in the public URL: /f/<slug>
+    status            FormStatus @default(DRAFT)
+    // Chatbot widget customisation
+    welcomeMessage    String     @default("Hi there! Got a minute to answer a few quick questions?")
+    completionMessage String     @default("Thanks! Your response has been recorded.")
+    primaryColor      String     @default("#4f46e5")
+    createdAt         DateTime   @default(now())
+    updatedAt         DateTime   @updatedAt
+    questions         Question[]
+    responses         Response[]
+
+    @@index([userId])
+}
+
+model Question {
+    id        String       @id @default(cuid())
+    formId    String
+    form      Form         @relation(fields: [formId], references: [id], onDelete: Cascade)
+    type      QuestionType
+    label     String
+    required  Boolean      @default(false)
+    options   String[] // choices for MULTIPLE_CHOICE; empty for other types
+    position  Int // display order, 0 = first
+    createdAt DateTime     @default(now())
+    answers   Answer[]
+
+    @@index([formId, position])
+}
+
+// ---------- Submissions ----------
+
+model Response {
+    id        String   @id @default(cuid())
+    formId    String
+    form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now()) // submission timestamp
+    answers   Answer[]
+
+    @@index([formId, createdAt])
+}
+
+model Answer {
+    id            String    @id @default(cuid())
+    responseId    String
+    response      Response  @relation(fields: [responseId], references: [id], onDelete: Cascade)
+    // If the question is later deleted, keep the answer but unlink it.
+    questionId    String?
+    question      Question? @relation(fields: [questionId], references: [id], onDelete: SetNull)
+    // Copy of the question text at submission time, so old responses still
+    // make sense after the form is edited.
+    questionLabel String
+    value         String
+
+    @@index([responseId])
+}
