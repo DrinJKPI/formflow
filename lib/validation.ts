@@ -29,3 +29,9 @@ export type AuthState =
         email?: string; // so the email field stays filled in
     }
     | undefined;
+
+export const formTitleSchema = z
+    .string()
+    .trim()
+    .min(1, "Title can't be empty.")
+    .max(100, "Title must be at most 100 characters.");
