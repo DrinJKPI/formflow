@@ -1,9 +1,11 @@
 // Temporary home page for Day 1. The full landing page (hero, features,
 // how it works, live widget demo, footer) is built on Day 8.
 
+import Link from "next/link";
+
 const roadmap = [
   { day: 1, title: "Project setup", done: true },
-  { day: 2, title: "Database and security", done: false },
+  { day: 2, title: "Database and security", done: true },
   { day: 3, title: "Dashboard", done: false },
   { day: 4, title: "Form builder", done: false },
   { day: 5, title: "Chat experience", done: false },
@@ -26,6 +28,21 @@ export default function Home() {
         Create interactive forms, embed them on any website as a chatbot
         widget, and manage every response from one dashboard.
       </p>
+
+      <div className="mt-6 flex gap-3">
+        <Link
+          href="/signup"
+          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+        >
+          Sign up
+        </Link>
+        <Link
+          href="/login"
+          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+        >
+          Log in
+        </Link>
+      </div>
 
       <h2 className="mt-12 text-sm font-semibold text-slate-900">Build plan</h2>
       <ol className="mt-3 divide-y divide-slate-200 rounded-xl border border-slate-200">
