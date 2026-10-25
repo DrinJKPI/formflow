@@ -60,7 +60,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                         <button
                             type="submit"
                             disabled={pending}
-                            className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
+                            className="w-full rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             {pending ? "Please wait…" : isLogin ? "Log in" : "Create account"}
                         </button>
@@ -71,7 +71,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                     {isLogin ? "No account yet? " : "Already have an account? "}
                     <Link
                         href={isLogin ? "/signup" : "/login"}
-                        className="font-medium text-indigo-600 hover:underline"
+                        className="font-medium text-brand-600 hover:underline"
                     >
                         {isLogin ? "Sign up" : "Log in"}
                     </Link>
@@ -106,7 +106,7 @@ function Field({ label, name, hint, errors, ...inputProps }: FieldProps) {
                 required
                 aria-invalid={hasError}
                 aria-describedby={`${name}-help`}
-                className={`mt-1 block w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 ${hasError ? "border-red-400" : "border-slate-300"
+                className={`mt-1 block w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500 ${hasError ? "border-red-400" : "border-slate-300"
                     }`}
                 {...inputProps}
             />

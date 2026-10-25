@@ -39,11 +39,11 @@ export function FormRow({ form }: FormRowProps) {
                             maxLength={100}
                             autoFocus
                             aria-label="Form title"
-                            className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-brand-500"
                         />
                         <SubmitButton
                             pendingText="Saving…"
-                            className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500"
+                            className="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-500"
                         >
                             Save
                         </SubmitButton>

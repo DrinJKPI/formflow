@@ -16,7 +16,7 @@ export default function DashboardPage() {
                 <form action={createForm}>
                     <SubmitButton
                         pendingText="Creating…"
-                        className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+                        className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-500"
                     >
                         + New form
                     </SubmitButton>

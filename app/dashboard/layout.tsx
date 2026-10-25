@@ -11,9 +11,18 @@ export default function DashboardLayout({
         <div className="flex flex-1 flex-col bg-slate-50">
             <header className="border-b border-slate-200 bg-white">
                 <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
-                    <Link href="/dashboard" className="font-bold">
-                        FormFlow
-                    </Link>
+                    <nav className="flex items-center gap-4 text-sm">
+                        {/* The logo goes back to the landing page. */}
+                        <Link href="/" className="text-base font-bold">
+                            FormFlow
+                        </Link>
+                        <Link
+                            href="/dashboard"
+                            className="font-medium text-slate-600 hover:text-brand-600"
+                        >
+                            Dashboard
+                        </Link>
+                    </nav>
                     {/* UserMenu reads the session cookie, so it streams in behind a
               placeholder while the rest of the page shows straight away. */}
                     <Suspense
