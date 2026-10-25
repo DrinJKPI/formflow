@@ -1,13 +1,15 @@
-// Landing page: header, hero, features, how it works, demo, footer
-// Almost everything here is static, so Next.js prerenders it to plain HTML
-// Only the header buttons depend on whether you're logged in
+// Landing page: header, hero, features, how it works, demo, footer.
+// Almost everything here is static, so Next.js prerenders it to plain HTML.
+// Only the header buttons depend on whether you're logged in.
 
 import Link from "next/link";
 import { Suspense } from "react";
+import { ChatForm } from "@/components/chat-form";
+import { demoForm } from "@/lib/demo-form";
 import { getCurrentUser } from "@/lib/session";
 
-// Change these details
-const CONTACT_EMAIL = "email@example.com";
+// Change these to your own details.
+const CONTACT_EMAIL = "you@example.com";
 const GITHUB_URL = "https://github.com/your-username/formflow";
 
 const features = [
@@ -87,7 +89,7 @@ function SiteHeader() {
           >
             How it works
           </a>
-          {/* Reads the session cookie, so it streams in separately */}
+          {/* Reads the session cookie, so it streams in separately. */}
           <Suspense fallback={<div className="h-9 w-36" />}>
             <HeaderActions />
           </Suspense>
@@ -97,7 +99,7 @@ function SiteHeader() {
   );
 }
 
-// Logged in: a link to the dashboard. Logged out: Log in and Sign up
+// Logged in: a link to the dashboard. Logged out: Log in and Sign up.
 async function HeaderActions() {
   const user = await getCurrentUser();
 
@@ -158,7 +160,7 @@ function Hero() {
   );
 }
 
-// A static picture of the chat widget, built from HTML and Tailwind
+// A static picture of the chat widget, built from HTML and Tailwind.
 function ChatPreview() {
   return (
     <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
@@ -272,25 +274,28 @@ function HowItWorks() {
   );
 }
 
-// Placeholder for the live chatbot widget demo (added once the widget exists)
+// Live demo: the real chat component with a sample form. Nothing is saved.
 function Demo() {
   return (
-    <section
-      id="demo"
-      className="scroll-mt-16 bg-brand-600 py-16 text-white sm:py-20"
-    >
-      <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-        <h2 className="text-3xl font-bold tracking-tight">Try it yourself</h2>
-        <p className="mt-3 text-brand-100">
-          A live chatbot widget demo is coming soon. Until then, create a free
-          account and build your first form.
-        </p>
-        <Link
-          href="/signup"
-          className="mt-8 inline-block rounded-lg bg-white px-5 py-3 font-semibold text-brand-700 hover:bg-brand-50"
-        >
-          Create your first form
-        </Link>
+    <section id="demo" className="scroll-mt-16 bg-brand-600 py-16 sm:py-24">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
+        <div className="text-white">
+          <h2 className="text-3xl font-bold tracking-tight">Try it yourself</h2>
+          <p className="mt-3 text-brand-100">
+            This is the real chat experience your visitors get. Try leaving an
+            answer blank or typing an invalid email to see the validation. Demo
+            answers aren&apos;t saved.
+          </p>
+          <Link
+            href="/signup"
+            className="mt-8 inline-block rounded-lg bg-white px-5 py-3 font-semibold text-brand-700 hover:bg-brand-50"
+          >
+            Create your own form
+          </Link>
+        </div>
+        <div className="mx-auto w-full max-w-sm">
+          <ChatForm form={demoForm} />
+        </div>
       </div>
     </section>
   );
