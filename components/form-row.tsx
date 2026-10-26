@@ -1,6 +1,7 @@
 "use client";
-// One form in the dashboard list, with Rename and Delete.
+// One form in the dashboard list, with Edit, Rename and Delete.
 
+import Link from "next/link";
 import { useState } from "react";
 import { deleteForm, renameForm } from "@/app/actions/forms";
 import { SubmitButton } from "@/components/submit-button";
@@ -58,7 +59,14 @@ export function FormRow({ form }: FormRowProps) {
                 ) : (
                     <>
                         <div className="flex items-center gap-2">
-                            <h3 className="truncate font-medium">{form.title}</h3>
+                            <h3 className="truncate font-medium">
+                                <Link
+                                    href={`/dashboard/forms/${form.id}`}
+                                    className="hover:text-brand-600"
+                                >
+                                    {form.title}
+                                </Link>
+                            </h3>
                             <StatusBadge status={form.status} />
                         </div>
                         <p className="mt-1 text-sm text-slate-500">
@@ -72,6 +80,12 @@ export function FormRow({ form }: FormRowProps) {
 
             {!editing && (
                 <div className="flex gap-2">
+                    <Link
+                        href={`/dashboard/forms/${form.id}`}
+                        className="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-500"
+                    >
+                        Edit
+                    </Link>
                     <button
                         type="button"
                         onClick={() => setEditing(true)}
