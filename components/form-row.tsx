@@ -1,5 +1,5 @@
 "use client";
-// One form in the dashboard list, with Edit, Rename and Delete.
+// One form in the dashboard list, with Edit, Responses, Rename and Delete.
 
 import Link from "next/link";
 import { useState } from "react";
@@ -79,12 +79,18 @@ export function FormRow({ form }: FormRowProps) {
             </div>
 
             {!editing && (
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                     <Link
                         href={`/dashboard/forms/${form.id}`}
                         className="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-500"
                     >
                         Edit
+                    </Link>
+                    <Link
+                        href={`/dashboard/forms/${form.id}/responses`}
+                        className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium hover:bg-slate-50"
+                    >
+                        Responses
                     </Link>
                     <button
                         type="button"
