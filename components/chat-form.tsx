@@ -1,9 +1,14 @@
 "use client";
 // The chatbot: shows a form's questions one at a time as a chat.
-// It's used for the landing page demo now, and later for the form builder
-// preview, the public form page and the embeddable widget.
+// Used by the landing page demo, the form builder preview, the public form
+// page and the embeddable widget.
 
 import { useEffect, useRef, useState } from "react";
+import {
+    MAX_ANSWER_LENGTH,
+    choicesFor,
+    validateAnswer,
+} from "@/lib/answer-rules";
 
 export type ChatQuestion = {
     id: string;
@@ -28,36 +33,15 @@ type ChatFormProps = {
     // Called once with all answers after the last question. Leave it out
     // (e.g. for demos and previews) and nothing is saved.
     onSubmit?: (answers: ChatAnswer[]) => Promise<void>;
+    // "card": a fixed-height box with a shadow (default).
+    // "fill": fills its container edge to edge (used inside the embed widget).
+    variant?: "card" | "fill";
 };
 
 type Message = { id: number; from: "bot" | "user"; text: string };
 type Status = "answering" | "submitting" | "done" | "error";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_ANSWER_LENGTH = 1000;
-
-// Returns an error message, or null if the answer is fine.
-function validate(question: ChatQuestion, value: string): string | null {
-    if (value === "") {
-        return question.required ? "This question needs an answer." : null;
-    }
-    if (value.length > MAX_ANSWER_LENGTH) {
-        return `Please keep it under ${MAX_ANSWER_LENGTH} characters.`;
-    }
-    if (question.type === "EMAIL" && !EMAIL_PATTERN.test(value)) {
-        return "That doesn't look like an email address.";
-    }
-    return null;
-}
-
-// Yes/no questions always offer the same two buttons.
-function choicesFor(question: ChatQuestion): string[] {
-    if (question.type === "YES_NO") return ["Yes", "No"];
-    if (question.type === "MULTIPLE_CHOICE") return question.options;
-    return [];
-}
-
-export function ChatForm({ form, onSubmit }: ChatFormProps) {
+export function ChatForm({ form, onSubmit, variant = "card" }: ChatFormProps) {
     const { questions } = form;
 
     // The opening messages: the welcome text, then the first question
@@ -116,7 +100,7 @@ export function ChatForm({ form, onSubmit }: ChatFormProps) {
         if (!question || status !== "answering") return;
         const value = rawValue.trim();
 
-        const problem = validate(question, value);
+        const problem = validateAnswer(question, value);
         if (problem) {
             setError(problem);
             return;
@@ -153,7 +137,10 @@ export function ChatForm({ form, onSubmit }: ChatFormProps) {
             // The form's colour is set once here as a CSS variable, then used by
             // the Tailwind classes below, e.g. bg-[var(--chat-color)].
             style={{ "--chat-color": form.primaryColor } as React.CSSProperties}
-            className="flex h-[32rem] max-h-full w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white text-left text-sm text-slate-900 shadow-xl"
+            className={`flex w-full flex-col overflow-hidden bg-white text-left text-sm text-slate-900 ${variant === "fill"
+                    ? "h-full"
+                    : "h-[32rem] max-h-full rounded-2xl border border-slate-200 shadow-xl"
+                }`}
         >
             <div className="bg-[var(--chat-color)] px-4 py-3 font-semibold text-white">
                 {form.title}
@@ -277,7 +264,7 @@ export function ChatForm({ form, onSubmit }: ChatFormProps) {
                         onClick={restart}
                         className="w-full rounded-lg border border-slate-300 px-3 py-2 font-medium hover:bg-slate-50"
                     >
-                        Start again
+                        {onSubmit ? "Submit another response" : "Start again"}
                     </button>
                 )}
 

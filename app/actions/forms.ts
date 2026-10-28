@@ -50,19 +50,44 @@ export async function deleteForm(formId: string) {
   refresh();
 }
 
+// Publish or unpublish a form. Only published forms accept responses.
+export async function setPublished(
+  formId: string,
+  publish: boolean,
+): Promise<{ error?: string }> {
+  const user = await requireUser();
+
+  const form = await db.form.findFirst({
+    where: { id: formId, userId: user.id },
+    select: { _count: { select: { questions: true } } },
+  });
+  if (!form) return { error: "Form not found." };
+  if (publish && form._count.questions === 0) {
+    return { error: "Add at least one question before publishing." };
+  }
+
+  await db.form.update({
+    where: { id: formId },
+    data: { status: publish ? "PUBLISHED" : "DRAFT" },
+  });
+
+  refresh();
+  return {};
+}
+
 // What saveForm sends back to the editor.
 export type SaveFormResult =
   | {
-      ok: true;
-      // The saved questions, now with real database IDs.
-      questions: {
-        id: string;
-        type: "TEXT" | "EMAIL" | "MULTIPLE_CHOICE" | "YES_NO";
-        label: string;
-        required: boolean;
-        options: string[];
-      }[];
-    }
+    ok: true;
+    // The saved questions, now with real database IDs.
+    questions: {
+      id: string;
+      type: "TEXT" | "EMAIL" | "MULTIPLE_CHOICE" | "YES_NO";
+      label: string;
+      required: boolean;
+      options: string[];
+    }[];
+  }
   | { ok: false; error: string };
 
 // Saves everything from the form editor in one go: the settings and the

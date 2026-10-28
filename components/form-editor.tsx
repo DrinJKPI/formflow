@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { saveForm } from "@/app/actions/forms";
 import { ChatForm } from "@/components/chat-form";
+import { PublishPanel } from "@/components/publish-panel";
 import { QuestionEditor } from "@/components/question-editor";
 import type { FormEditorData } from "@/lib/validation";
 
@@ -14,6 +15,7 @@ export type QuestionType = EditorQuestion["type"];
 
 type FormEditorProps = {
     formId: string;
+    slug: string;
     status: "DRAFT" | "PUBLISHED";
     initialData: FormEditorData;
 };
@@ -25,7 +27,12 @@ const addButtons: { type: QuestionType; label: string }[] = [
     { type: "YES_NO", label: "Yes / No" },
 ];
 
-export function FormEditor({ formId, status, initialData }: FormEditorProps) {
+export function FormEditor({
+    formId,
+    slug,
+    status,
+    initialData,
+}: FormEditorProps) {
     const [data, setData] = useState(initialData); // what you're editing
     const [saved, setSaved] = useState(initialData); // what's in the database
     const [message, setMessage] = useState<{ ok: boolean; text: string }>();
@@ -127,11 +134,14 @@ export function FormEditor({ formId, status, initialData }: FormEditorProps) {
                     <h1 className="mt-1 text-2xl font-bold tracking-tight">
                         {data.title || "Untitled form"}
                     </h1>
-                    <p className="mt-1 text-sm text-slate-500">
-                        Status: {status === "PUBLISHED" ? "Published" : "Draft"}
-                    </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                        href={`/dashboard/forms/${formId}/responses`}
+                        className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+                    >
+                        Responses
+                    </Link>
                     {dirty && !saving && (
                         <span className="text-sm text-slate-500">Unsaved changes</span>
                     )}
@@ -150,8 +160,8 @@ export function FormEditor({ formId, status, initialData }: FormEditorProps) {
                 <p
                     role={message.ok ? "status" : "alert"}
                     className={`mt-4 rounded-lg px-3 py-2 text-sm ${message.ok
-                            ? "bg-emerald-50 text-emerald-700"
-                            : "bg-red-50 text-red-700"
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "bg-red-50 text-red-700"
                         }`}
                 >
                     {message.text}
@@ -161,6 +171,13 @@ export function FormEditor({ formId, status, initialData }: FormEditorProps) {
             <div className="mt-6 grid items-start gap-8 lg:grid-cols-[1fr_24rem]">
                 {/* Left: the editor */}
                 <div className="space-y-6">
+                    <PublishPanel
+                        formId={formId}
+                        slug={slug}
+                        status={status}
+                        hasUnsavedChanges={dirty}
+                    />
+
                     <section className="rounded-xl border border-slate-200 bg-white p-5">
                         <h2 className="font-semibold">Form settings</h2>
                         <div className="mt-4 space-y-4">

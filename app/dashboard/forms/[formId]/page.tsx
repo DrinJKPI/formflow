@@ -32,6 +32,7 @@ async function EditorLoader({
         where: { id: formId, userId: user.id },
         select: {
             id: true,
+            slug: true,
             title: true,
             description: true,
             status: true,
@@ -55,6 +56,7 @@ async function EditorLoader({
     return (
         <FormEditor
             formId={form.id}
+            slug={form.slug}
             status={form.status}
             initialData={{
                 title: form.title,
