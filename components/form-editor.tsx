@@ -1,6 +1,6 @@
 "use client";
 // The form builder: edit settings and questions on the left, see a live
-// chat preview on the right, then save everything with one button.
+// chat preview on the right, then save everything with one button
 
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
@@ -41,7 +41,7 @@ export function FormEditor({
     // Unsaved changes = the current data differs from the last saved data.
     const dirty = JSON.stringify(data) !== JSON.stringify(saved);
 
-    // Warn before closing the tab or reloading with unsaved changes.
+    // Warn before closing the tab or reloading with unsaved changes
     useEffect(() => {
         if (!dirty) return;
         const warn = (event: BeforeUnloadEvent) => event.preventDefault();
@@ -109,7 +109,7 @@ export function FormEditor({
         startSaving(async () => {
             const result = await saveForm(formId, data);
             if (result.ok) {
-                // Swap the temporary IDs for the real ones from the database.
+                // Swap the temporary IDs for the real ones from the database
                 const savedData = { ...data, questions: result.questions };
                 setData(savedData);
                 setSaved(savedData);
@@ -175,6 +175,7 @@ export function FormEditor({
                         formId={formId}
                         slug={slug}
                         status={status}
+                        color={data.primaryColor}
                         hasUnsavedChanges={dirty}
                     />
 
@@ -301,7 +302,7 @@ export function FormEditor({
     );
 }
 
-// A labelled text input or textarea.
+// A labelled text input or textarea
 function TextField({
     label,
     value,

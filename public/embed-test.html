@@ -1,0 +1,79 @@
+<!doctype html>
+<!--
+  A pretend customer website for testing the FormFlow widget
+  Open /embed-test.html?form=<slug>&color=%23dc2626 on your FormFlow app
+  or copy this file anywhere and change the script tag at the bottom
+-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sunrise Bakery (widget test site)</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Georgia, serif;
+            color: #3b2f2f;
+            background: #fdf8f3;
+        }
+
+        header {
+            padding: 20px 24px;
+            background: #3b2f2f;
+            color: #fdf8f3;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 32px 24px 120px;
+            line-height: 1.6;
+        }
+
+        .note {
+            padding: 12px 16px;
+            border: 1px dashed #b08968;
+            background: #fff;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Sunrise Bakery</h1>
+    </header>
+    <main>
+        <p class="note">
+            This is a test website for the FormFlow widget. Click the round chat
+            button in the bottom-right corner.
+        </p>
+        <h2>Fresh bread every morning</h2>
+        <p>
+            We bake sourdough, rye and seeded loaves before sunrise, using flour
+            from local mills. Pop in for a coffee and a cinnamon bun.
+        </p>
+        <h2>Opening hours</h2>
+        <p>Monday to Saturday, 7:00 to 18:00. Sunday, 8:00 to 14:00.</p>
+    </main>
+
+    <!-- Load the widget for the form given in the page address -->
+    <script>
+        var params = new URLSearchParams(location.search);
+        var widget = document.createElement("script");
+        widget.src = "/embed.js";
+        widget.async = true;
+        widget.setAttribute("data-form", params.get("form") || "");
+        widget.setAttribute("data-color", params.get("color") || "#dc2626");
+        document.body.appendChild(widget);
+    </script>
+</body>
+
+</html>
