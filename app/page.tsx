@@ -1,14 +1,15 @@
-// Landing page: header, hero, features, how it works, demo, footer.
-// Almost everything here is static, so Next.js prerenders it to plain HTML.
-// Only the header buttons depend on whether you're logged in.
+// Landing page: header, hero, features, how it works, demo, footer
+// Almost everything here is static, so Next.js prerenders it to plain HTML
+// Only the header buttons depend on whether you're logged in
 
 import Link from "next/link";
 import { Suspense } from "react";
 import { ChatForm } from "@/components/chat-form";
+import { DemoWidget } from "@/components/demo-widget";
 import { demoForm } from "@/lib/demo-form";
 import { getCurrentUser } from "@/lib/session";
 
-// Change these to your own details.
+// Change these to your own details
 const CONTACT_EMAIL = "you@example.com";
 const GITHUB_URL = "https://github.com/your-username/formflow";
 
@@ -65,6 +66,7 @@ export default function Home() {
         <Demo />
       </main>
       <SiteFooter />
+      <DemoWidget />
     </div>
   );
 }
@@ -99,7 +101,7 @@ function SiteHeader() {
   );
 }
 
-// Logged in: a link to the dashboard. Logged out: Log in and Sign up.
+// Logged in: a link to the dashboard. Logged out: Log in and Sign up
 async function HeaderActions() {
   const user = await getCurrentUser();
 
@@ -137,8 +139,8 @@ function Hero() {
           Turn your forms into conversations
         </h1>
         <p className="mt-6 text-lg text-slate-600">
-          Build a form in minutes, embed it on any website as a chatbot widget,
-          and manage every response from one simple dashboard.
+          Build a form in minutes, embed it on any website as a chatbot widget
+          and manage every response from one simple dashboard
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -160,7 +162,7 @@ function Hero() {
   );
 }
 
-// A static picture of the chat widget, built from HTML and Tailwind.
+// A static picture of the chat widget built from HTML and Tailwind
 function ChatPreview() {
   return (
     <div className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
@@ -274,7 +276,7 @@ function HowItWorks() {
   );
 }
 
-// Live demo: the real chat component with a sample form. Nothing is saved.
+// Live demo: the real chat component with a sample form Nothing is saved
 function Demo() {
   return (
     <section id="demo" className="scroll-mt-16 bg-brand-600 py-16 sm:py-24">
@@ -283,8 +285,10 @@ function Demo() {
           <h2 className="text-3xl font-bold tracking-tight">Try it yourself</h2>
           <p className="mt-3 text-brand-100">
             This is the real chat experience your visitors get. Try leaving an
-            answer blank or typing an invalid email to see the validation. Demo
-            answers aren&apos;t saved.
+            answer blank or typing an invalid email to see the validation. Or
+            click the round chat button in the bottom-right corner to see the
+            floating widget that websites can embed. Demo answers aren&apos;t
+            saved.
           </p>
           <Link
             href="/signup"
